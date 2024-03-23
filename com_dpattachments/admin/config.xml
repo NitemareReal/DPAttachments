@@ -28,6 +28,21 @@
 			label="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_LABEL"
 			description="COM_DPATTACHMENTS_CONFIG_FIELD_COMPONENTS_EXCLUDE_DESC">
 		</field>
+		<field name="show_upload_date" type="list" default="allusers" label="COM_DPATTACHMENTS_CONFIG_FIELD_SHOW_UPLOAD_DATE_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_SHOW_UPLOAD_DATE_DESC">
+			<option value="allusers">COM_DPATTACHMENTS_ALL_USERS</option>
+			<option value="nouser">COM_DPATTACHMENTS_NONE_USER</option>
+			<option value="selected">COM_DPATTACHMENTS_SELECTED_ACCESS_LEVEL</option>
+		</field>
+		<field name="show_creation_date_access_level" type="accesslevel" showon="show_upload_date:selected" multiple="true" label="COM_DPATTACHMENTS_CONFIG_FIELD_ACCESS_LEVEL_LABEL" desc="COM_DPATTACHMENTS_CONFIG_FIELD_ACCESS_LEVEL_DESC"
+			layout="joomla.form.field.list-fancy-select" />
+		<field name="show_uploader" type="list" default="allusers" label="COM_DPATTACHMENTS_CONFIG_FIELD_SHOW_UPLOADER_LABEL" description="COM_DPATTACHMENTS_CONFIG_FIELD_SHOW_UPLOADER_DESC">
+			<option value="allusers">COM_DPATTACHMENTS_ALL_USERS</option>
+			<option value="nouser">COM_DPATTACHMENTS_NONE_USER</option>
+			<option value="selected">COM_DPATTACHMENTS_SELECTED_ACCESS_LEVEL</option>
+		</field>
+		<field name="show_uploader_access_level" type="accesslevel" showon="show_uploader:selected" multiple="true" label="COM_DPATTACHMENTS_CONFIG_FIELD_ACCESS_LEVEL_LABEL" desc="COM_DPATTACHMENTS_CONFIG_FIELD_ACCESS_LEVEL_DESC"
+			layout="joomla.form.field.list-fancy-select" />
+
 	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL"
 		description="JCONFIG_PERMISSIONS_DESC">

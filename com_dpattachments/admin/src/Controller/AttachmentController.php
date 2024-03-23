@@ -49,7 +49,6 @@ class AttachmentController extends FormController
 				$item->author_name  = $author['author_name'];
 				$item->author_email = $author['author_email'];
 			}
-
 			$content = $this->app->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
 				['attachment' => $item]
