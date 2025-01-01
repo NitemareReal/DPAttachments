@@ -5,13 +5,13 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
-use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 
 $app = Factory::getApplication();
-if (!$app instanceof SiteApplication) {
+if (!$app instanceof CMSApplication) {
 	return;
 }
 

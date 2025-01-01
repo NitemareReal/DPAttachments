@@ -170,7 +170,7 @@ class AttachmentsModel extends ListModel
 
 		// Filter by state state
 		$state = $this->getState('filter.state');
-		if (is_array($state)) {
+		if (\is_array($state)) {
 			$state = ArrayHelper::toInteger($state);
 			$query->where('a.state in (' . implode(',', $state) . ')');
 		} elseif (is_numeric($state)) {
@@ -192,7 +192,7 @@ class AttachmentsModel extends ListModel
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
 			} elseif (stripos($search, 'author:') === 0) {
-				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
+				$search = $db->quote('%' . $db->escape(substr((string)$search, 7), true) . '%');
 				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');

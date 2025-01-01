@@ -5,7 +5,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
@@ -17,8 +17,8 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 {
 	use DatabaseAwareTrait;
 
-	protected $minimumPhp    = '7.4.0';
-	protected $minimumJoomla = '4.2.0';
+	protected $minimumPhp    = '8.1.0';
+	protected $minimumJoomla = '4.4.0';
 
 	public function update(InstallerAdapter $parent): void
 	{
@@ -37,7 +37,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 			}
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
@@ -49,7 +49,7 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 				}
 
 				foreach (Folder::files($folder . '/language', '.', true, true) as $file) {
-					if (strpos(basename($file), basename(dirname($file))) === 0) {
+					if (str_starts_with(basename((string)$file), basename(\dirname((string)$file)))) {
 						unlink($file);
 					}
 				}

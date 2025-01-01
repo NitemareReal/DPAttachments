@@ -5,7 +5,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -39,7 +39,7 @@ HTMLHelper::_('stylesheet', 'com_dpattachments/dpattachments/views/attachment/cs
 		<?php foreach ($csv->data as $row) { ?>
 			<tr>
 				<?php foreach ($row as $value) { ?>
-					<td><?php echo nl2br(htmlentities($value)); ?></td>
+					<td><?php echo nl2br(htmlentities((string) $value)); ?></td>
 				<?php } ?>
 			</tr>
 		<?php } ?>

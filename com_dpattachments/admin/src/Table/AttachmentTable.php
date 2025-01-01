@@ -86,7 +86,7 @@ class AttachmentTable extends Table implements CurrentUserInterface
 
 	public function bind($array, $ignore = '')
 	{
-		if (is_array($array) && isset($array['params']) && is_array($array['params'])) {
+		if (\is_array($array) && isset($array['params']) && \is_array($array['params'])) {
 			$registry = new Registry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string)$registry;
@@ -165,7 +165,7 @@ class AttachmentTable extends Table implements CurrentUserInterface
 
 		return parent::store($updateNulls);
 	}
-
+/*
 	public function publish($pks = null, $state = 1, $userId = 0): bool
 	{
 		$k = $this->_tbl_key;
@@ -218,4 +218,5 @@ class AttachmentTable extends Table implements CurrentUserInterface
 
 		return true;
 	}
+*/
 }

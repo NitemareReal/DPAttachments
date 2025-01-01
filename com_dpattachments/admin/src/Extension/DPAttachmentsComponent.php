@@ -38,16 +38,9 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	private array $itemCache = [];
 
-	private DatabaseInterface $db;
-
-	private CMSApplicationInterface $app;
-
-	public function __construct(CMSApplicationInterface $app, DatabaseInterface $db, ComponentDispatcherFactoryInterface $dispatcherFactory)
+	public function __construct(private readonly CMSApplicationInterface $app, private readonly DatabaseInterface $db, ComponentDispatcherFactoryInterface $dispatcherFactory)
 	{
 		parent::__construct($dispatcherFactory);
-
-		$this->app = $app;
-		$this->db  = $db;
 	}
 
 	/**
@@ -60,7 +53,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 * The render form parameter defines if the upload form should be rendered when the edit
 	 * permission exists.
 	 */
-	public function render(string $context, string $itemId, ?Registry $options = null, bool $renderForm = true): string
+	public function render(string $context, string $itemId, ?Registry $options = null, ?bool $renderForm = true): string
 	{
 		if (!$this->isEnabled()) {
 			return '';
@@ -120,7 +113,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			['context' => $context, 'itemid' => $itemId, 'attachments' => $event->getArgument('attachments'), 'options' => $options]
 		);
 
-		if (!$canEdit || !$renderForm) {
+		if (!$canEdit || $renderForm !== true) {
 			return $buffer;
 		}
 
@@ -159,6 +152,8 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	 */
 	public function canDo(string $action, string $context, string $itemId): bool
 	{
+		$action = $action === 'core.edit' && str_contains($itemId, 'tmp-') ? 'core.create' : $action;
+
 		PluginHelper::importPlugin('dpattachments');
 		$event = new Event('onDPAttachmentsCheckPermission', ['action' => $action, 'context' => $context, 'item_id' => $itemId]);
 		$this->app->getDispatcher()->dispatch('onDPAttachmentsCheckPermission', $event);
@@ -166,6 +161,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			return true;
 		}
 
+		// Check if there is enough information
 		if ($action === '' || $action === '0' || $context === '' || $context === '0' || $itemId === '' || $itemId === '0') {
 			return false;
 		}
@@ -173,7 +169,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		$key = $context . '.' . $itemId;
 
 		[$component, $modelName] = explode('.', $context);
-		if (!array_key_exists($key, $this->itemCache)) {
+		if (!\array_key_exists($key, $this->itemCache)) {
 			$instance = $this->app->bootComponent($component);
 
 			$table = null;
@@ -186,7 +182,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 				$table = $instance->getMVCFactory()->createTable(ucfirst($modelName), 'Administrator');
 			}
 
-			if ($table !== null) {
+			if (!empty($table)) {
 				$table->load($itemId);
 			}
 
@@ -205,7 +201,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			if ($user->authorise($action, $component)) {
 				return true;
 			}
-			return (bool) $user->authorise($action, 'com_dpattachments');
+			return (bool)$user->authorise($action, 'com_dpattachments');
 		}
 
 		$asset = $component;
@@ -240,7 +236,7 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 	public function getPath(string $attachmentPath, string $context): string
 	{
 		$folder = ComponentHelper::getParams('com_dpattachments')->get('attachment_path', 'media/com_dpattachments/attachments/');
-		$folder = trim($folder, '/');
+		$folder = trim((string)$folder, '/');
 
 		return JPATH_ROOT . '/' . $folder . '/' . $context . '/' . $attachmentPath;
 	}
@@ -330,22 +326,22 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		// Check for menu items to include
 		$menuItems = $params->get('menuitems');
 		if (!empty($menuItems)) {
-			if (!is_array($menuItems)) {
+			if (!\is_array($menuItems)) {
 				$menuItems = [$menuItems];
 			}
 
-			if (!in_array($input->getInt('Itemid', 0), $menuItems)) {
+			if (!\in_array($input->getInt('Itemid', 0), $menuItems)) {
 				return false;
 			}
 		}
 
 		$menuItems = $params->get('menuitems_exclude');
 		if (!empty($menuItems)) {
-			if (!is_array($menuItems)) {
+			if (!\is_array($menuItems)) {
 				$menuItems = [$menuItems];
 			}
 
-			if (in_array($input->getInt('Itemid', 0), $menuItems)) {
+			if (\in_array($input->getInt('Itemid', 0), $menuItems)) {
 				return false;
 			}
 		}
@@ -353,11 +349,11 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 		// Check for components to include
 		$components = $params->get('components');
 		if (!empty($components)) {
-			if (!is_array($components)) {
+			if (!\is_array($components)) {
 				$components = [$components];
 			}
 
-			if (!in_array($input->getCmd('option'), $components)) {
+			if (!\in_array($input->getCmd('option'), $components)) {
 				return false;
 			}
 		}

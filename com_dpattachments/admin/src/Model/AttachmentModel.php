@@ -74,8 +74,8 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		$fileName = $_FILES['file']['name'];
 
 		if ($fileName == 'blob') {
-			$extension = explode('/', $_FILES['file']['type']);
-			if (count($extension) > 1) {
+			$extension = explode('/', (string)$_FILES['file']['type']);
+			if (\count($extension) > 1) {
 				$fileName = 'clipboard.' . $extension[1];
 			}
 		}
@@ -91,7 +91,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 		$extOk = false;
 
 		foreach ($validFileExts as $value) {
-			if (preg_match(sprintf('/%s/i', $value), $uploadedFileExtension)) {
+			if (preg_match(\sprintf('/%s/i', $value), $uploadedFileExtension)) {
 				$extOk = true;
 			}
 		}
@@ -100,7 +100,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
 		}
 
-		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr($fileName, 0, strlen($fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
+		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, strlen((string)$fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
 			$uploadedFileExtension;
 
 		$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
@@ -109,7 +109,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);
 		}
 
-		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename($targetFile)];
+		$descriptor = ['tmp_name' => $_FILES['file']['tmp_name'], 'name' => basename((string)$targetFile)];
 		if (!ComponentHelper::getParams('com_dpattachments')->get('allow_unsafe_uploads', 0) && !InputFilter::isSafeFile($descriptor)) {
 			throw new \Exception(Text::_('COM_DPATTACHMENTS_UPLOAD_ERROR'));
 		}
@@ -176,7 +176,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			$data = $this->getItem();
 
 			// Prime some default values.
-			if (is_object($data) && $this->getState('attachment.id') == 0) {
+			if (\is_object($data) && $this->getState('attachment.id') == 0) {
 				// @phpstan-ignore-next-line
 				$data->set('itemid', $app->input->getInt('itemid', $app->getUserState('com_dpattachments.item.filter.itemid', 0)));
 			}
@@ -208,9 +208,9 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 	public function delete(&$pks)
 	{
 		$attachments = [];
-		foreach (ArrayHelper::toInteger((array) $pks) as $id) {
+		foreach (ArrayHelper::toInteger((array)$pks) as $id) {
 			$attachment = $this->getItem($id);
-			if (!is_object($attachment)) {
+			if (!\is_object($attachment)) {
 				continue;
 			}
 

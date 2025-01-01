@@ -19,7 +19,7 @@ class AttachmentController extends FormController
 		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 
 		$record = $this->getModel()->getItem($recordId);
-		if (is_object($record)) {
+		if (\is_object($record)) {
 			return $this->app->bootComponent('dpattachments')->canDo('core.edit', $record->context, $record->item_id);
 		}
 
@@ -43,12 +43,13 @@ class AttachmentController extends FormController
 			$item = $model->getItem($model->getState($model->getName() . '.id'));
 
 			// If no "created_by_alias" is available, we need to load the creator user info (name and email) to avoid showing user id
-			if (is_object($item) && empty($item->created_by_alias) && !empty($item->created_by)) {
+			if (\is_object($item) && empty($item->created_by_alias) && !empty($item->created_by)) {
 				$author             = $model->getAuthor($item->created_by);
 				$item->author_id    = $author['author_id'];
 				$item->author_name  = $author['author_name'];
 				$item->author_email = $author['author_email'];
 			}
+
 			$content = $this->app->bootComponent('dpattachments')->renderLayout(
 				'attachment.render',
 				['attachment' => $item]
@@ -80,15 +81,15 @@ class AttachmentController extends FormController
 
 		$this->getModel()->hit($attachment->id);
 
-		$basename  = @basename($filename);
+		$basename  = @basename((string)$filename);
 		$filesize  = @filesize($filename);
 		$mime_type = 'application/octet-stream';
 
 		// Fix IE bugs
-		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr((string)$_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			$header_file = preg_replace('/\./', '%2e', $basename, substr_count($basename, '.') - 1);
 
-			if (ini_get('zlib.output_compression')) {
+			if (\ini_get('zlib.output_compression')) {
 				ini_set('zlib.output_compression', 'Off');
 			}
 		} else {
@@ -112,7 +113,7 @@ class AttachmentController extends FormController
 		header('Connection: close');
 
 		error_reporting(0);
-		if (ini_get('safe_mode') === '' || ini_get('safe_mode') === '0' || ini_get('safe_mode') === false) {
+		if (\ini_get('safe_mode') === '' || \ini_get('safe_mode') === '0' || \ini_get('safe_mode') === false) {
 			set_time_limit(0);
 		}
 
@@ -121,9 +122,9 @@ class AttachmentController extends FormController
 		$seek_start  = 0;
 		$seek_end    = $filesize - 1;
 		if (isset($_SERVER['HTTP_RANGE'])) {
-			[$size_unit, $range_orig] = explode('=', $_SERVER['HTTP_RANGE'], 2);
+			[$size_unit, $range_orig] = explode('=', (string)$_SERVER['HTTP_RANGE'], 2);
 
-			if ($size_unit == 'bytes') {
+			if ($size_unit === 'bytes') {
 				// Multiple ranges could be specified at the same time, but for
 				// simplicity only serve the first range
 				[$range, $extra_ranges] = explode(',', $range_orig, 2);
@@ -139,8 +140,8 @@ class AttachmentController extends FormController
 			[$seek_start, $seek_end] = explode('-', $range, 2);
 
 			// Set start and end based on range (if set), else set defaults also check for invalid ranges
-			$seek_end   = ($seek_end === '' || $seek_end === '0') ? -1 : min(abs((int) $seek_end), ($filesize - 1));
-			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int) $seek_start)) ? 0 : max(abs((int) $seek_start), 0);
+			$seek_end   = ($seek_end === '' || $seek_end === '0') ? -1 : min(abs((int)$seek_end), ($filesize - 1));
+			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int)$seek_start)) ? 0 : max(abs((int) $seek_start), 0);
 
 			$isResumable = true;
 		}
@@ -174,16 +175,18 @@ class AttachmentController extends FormController
 				}
 			}
 			$read = 0;
-			while (!feof($handle) && ($chunksize > 0)) {
+			while (!feof($handle)) {
 				if ($isResumable && $totalLength - $read < $chunksize) {
 					$chunksize = $totalLength - $read;
-					if ($chunksize < 0) {
-						continue;
-					}
 				}
+
+				if ($chunksize < 1) {
+					break;
+				}
+
 				$buffer = fread($handle, $chunksize) ?: '';
 				if ($isResumable) {
-					$read += strlen($buffer);
+					$read += \strlen($buffer);
 				}
 				echo $buffer;
 				@ob_flush();

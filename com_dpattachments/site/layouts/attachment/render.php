@@ -5,7 +5,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
 use Joomla\CMS\Component\ComponentHelper;
@@ -35,7 +35,7 @@ $previewExtensions = [];
 foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachment') as $file) {
 	$previewExtensions[] = File::stripExt($file);
 }
-$showWhen 		= true;
+$showWhen		= true;
 $showWho		= true;
 $showUploadDate	= $params->get('show_upload_date', 'allusers');
 $showUploader	= $params->get('show_uploader', 'allusers');
@@ -61,10 +61,9 @@ if ($showUploader == "nouser") {
 	
 	$showWho = \count(\array_intersect($levels, $userLevels)) > 0;
 }
-
 ?>
 <div class="dp-attachment">
-	<?php if (in_array(strtolower(pathinfo($attachment->path, PATHINFO_EXTENSION)), $previewExtensions)) { ?>
+	<?php if (in_array(strtolower(pathinfo((string) $attachment->path, PATHINFO_EXTENSION)), $previewExtensions)) { ?>
 		<a href="<?php echo Route::link('site', 'index.php?option=com_dpattachments&view=attachment&tmpl=component&id=' . (int)$attachment->id); ?>"
 		   class="dp-attachment__link">
 			<?php echo $attachment->title; ?>

@@ -5,7 +5,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die;
+\defined('_JEXEC') or die;
 
 use DigitalPeak\Plugin\Content\DPAttachments\Extension\DPAttachments;
 use Joomla\CMS\Extension\PluginInterface;
@@ -24,7 +24,7 @@ return new class () implements ServiceProviderInterface {
 				$dispatcher = $container->get(DispatcherInterface::class);
 				$plugin     = new DPAttachments(
 					$dispatcher,
-					(array) PluginHelper::getPlugin('content', 'dpattachments')
+					(array)PluginHelper::getPlugin('content', 'dpattachments')
 				);
 				$plugin->setApplication(Factory::getApplication());
 

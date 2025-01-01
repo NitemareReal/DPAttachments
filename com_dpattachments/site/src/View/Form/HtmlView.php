@@ -38,10 +38,10 @@ class HtmlView extends BaseHtmlView
 	public function display($tpl = null): void
 	{
 		// Get model data
-		$this->state       = $this->get('State');
-		$this->item        = $this->get('Item');
-		$this->form        = $this->get('Form');
-		$this->return_page = $this->get('ReturnPage');
+		$this->state       = $this->getModel()->getState();
+		$this->item        = $this->getModel()->getItem() ?: new \stdClass();
+		$this->form        = $this->getModel()->getForm();
+		$this->return_page = $this->getModel()->getReturnPage();
 
 		$authorised = false;
 		if (!empty($this->item->params) && $this->item->params instanceof Registry) {
@@ -58,7 +58,7 @@ class HtmlView extends BaseHtmlView
 		}
 
 		// Check for errors
-		if ($errors = $this->get('Errors')) {
+		if ($errors = $this->getModel()->getErrors()) {
 			throw new \Exception(implode('\n', $errors));
 		}
 
@@ -102,7 +102,7 @@ class HtmlView extends BaseHtmlView
 			$title = Text::sprintf('JPAGETITLE', $title, $app->get('sitename'));
 		}
 
-		$document = method_exists($this, 'getDocument') ? $this->getDocument() : $app->getDocument();
+		$document = $this->getDocument();
 		$document->setTitle($title);
 
 		$pathway = $app->getPathWay();
