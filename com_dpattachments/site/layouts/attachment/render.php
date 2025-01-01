@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
@@ -28,11 +29,39 @@ $component = $app->bootComponent('dpattachments');
 if (!$component instanceof DPAttachmentsComponent) {
 	return;
 }
+$params = ComponentHelper::getParams('com_dpattachments');
 
 $previewExtensions = [];
 foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachment') as $file) {
 	$previewExtensions[] = File::stripExt($file);
 }
+$showWhen 		= true;
+$showWho		= true;
+$showUploadDate	= $params->get('show_upload_date', 'allusers');
+$showUploader	= $params->get('show_uploader', 'allusers');
+$userLevels		= null;
+
+if ($showUploadDate == "nouser") {
+	$showWhen = false;
+} else if ($showUploadDate == "selected") {// check if current user has any of the selected access level(s)
+	// get selected access level for "show date"
+	$levels = $params->get('show_creation_date_access_level', []);
+	// get current user access level(s)
+	$userLevels ??= $app->getIdentity()->getAuthorisedViewLevels();
+	
+	$showWhen = \count(\array_intersect($levels, $userLevels)) > 0;
+}
+if ($showUploader == "nouser") {
+	$showWho = false;
+} else if ($showUploader == "selected") {// check if current user has any of the selected access level(s)
+	// get selected access level for "show uploader"
+	$levels = $params->get('show_uploader_access_level', []);
+	// get current user access level(s)
+	$userLevels ??= $app->getIdentity()->getAuthorisedViewLevels();
+	
+	$showWho = \count(\array_intersect($levels, $userLevels)) > 0;
+}
+
 ?>
 <div class="dp-attachment">
 	<?php if (in_array(strtolower(pathinfo($attachment->path, PATHINFO_EXTENSION)), $previewExtensions)) { ?>
@@ -53,10 +82,19 @@ foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachme
 	<?php if (!empty($attachment->event) && !empty($attachment->event->beforeDisplayAttachment)) { ?>
 		<div class="dp-attachment__before-display"><?php echo $attachment->event->beforeDisplayAttachment; ?></div>
 	<?php } ?>
-	<div class="dp-attachment__date">
-		<?php $author = $attachment->created_by_alias ?: ($attachment->author_name ?? $attachment->created_by); ?>
-		<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL'), HTMLHelper::_('date.relative', $attachment->created), $author); ?>
+	<?php if ($showWhen || $showWho) : ?>
+	<div class="dp-attachment__date">		
+		<?php if ($showWhen && $showWho) : ?>
+			<?php $author = $attachment->created_by_alias ?: ($attachment->author_name ?? $attachment->created_by); ?>
+			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL'), HTMLHelper::_('date.relative', $attachment->created), $author); ?>
+		<?php elseif ($showWhen) : // only date ?>
+			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_ONLY_DATE_LABEL'), HTMLHelper::_('date.relative', $attachment->created)); ?>
+		<?php else : // only who ?>
+			<?php $author = $attachment->created_by_alias ?: ($attachment->author_name ?? $attachment->created_by); ?>
+			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_ONLY_UPLOADER_LABEL'), $author); ?>
+		<?php endif; ?>
 	</div>
+	<?php endif; ?>
 	<?php if (!empty($attachment->event) && !empty($attachment->event->afterDisplayAttachment)) { ?>
 		<div class="dp-attachment__after-display"><?php echo $attachment->event->afterDisplayAttachment; ?></div>
 	<?php } ?>
