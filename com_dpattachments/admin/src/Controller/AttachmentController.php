@@ -68,7 +68,7 @@ class AttachmentController extends FormController
 	public function download(): void
 	{
 		$attachment = $this->getModel()->getItem($this->input->get('id'));
-		if (!is_object($attachment)) {
+		if (!\is_object($attachment)) {
 			header('HTTP/1.0 404 Not Found');
 			exit(0);
 		}
@@ -141,7 +141,7 @@ class AttachmentController extends FormController
 
 			// Set start and end based on range (if set), else set defaults also check for invalid ranges
 			$seek_end   = ($seek_end === '' || $seek_end === '0') ? -1 : min(abs((int)$seek_end), ($filesize - 1));
-			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int)$seek_start)) ? 0 : max(abs((int) $seek_start), 0);
+			$seek_start = ($seek_start === '' || $seek_start === '0' || $seek_end < abs((int)$seek_start)) ? 0 : max(abs((int)$seek_start), 0);
 
 			$isResumable = true;
 		}

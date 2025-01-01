@@ -8,13 +8,11 @@
 namespace DigitalPeak\Component\DPAttachments\Administrator\Table;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\User\CurrentUserInterface;
 use Joomla\CMS\User\CurrentUserTrait;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
 
 class AttachmentTable extends Table implements CurrentUserInterface
 {

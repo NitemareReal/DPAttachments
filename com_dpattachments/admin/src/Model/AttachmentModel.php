@@ -80,12 +80,12 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			}
 		}
 
-		$uploadedFileNameParts = explode('.', $fileName);
+		$uploadedFileNameParts = explode('.', (string)$fileName);
 		$uploadedFileExtension = array_pop($uploadedFileNameParts);
 
 		$validFileExts = explode(
 			',',
-			ComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
+			(string)ComponentHelper::getParams('com_dpattachments')->get('attachment_extensions', 'gif,jpg,jpeg,png,zip,rar,csv,txt,pdf')
 		);
 
 		$extOk = false;
@@ -100,7 +100,7 @@ class AttachmentModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception(Text::sprintf('COM_DPATTACHMENTS_UPLOAD_INVALID_EXTENSION', implode(',', $validFileExts)));
 		}
 
-		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, strlen((string)$fileName) - strlen($uploadedFileExtension) - 1)) . '.' .
+		$fileName = preg_replace("/[^\p{L}|0-9]+/u", "-", substr((string)$fileName, 0, \strlen((string)$fileName) - \strlen($uploadedFileExtension) - 1)) . '.' .
 			$uploadedFileExtension;
 
 		$targetFile = $this->bootComponent('dpattachments')->getPath($fileName, $data['context']);

@@ -363,11 +363,11 @@ class DPAttachmentsComponent extends MVCComponent implements FieldsServiceInterf
 			['com_cache', 'com_actionlogs', 'com_menus', 'com_config', 'com_scheduler', 'com_plugins', 'com_media']
 		);
 		if (!empty($components)) {
-			if (!is_array($components)) {
+			if (!\is_array($components)) {
 				$components = [$components];
 			}
 
-			if (in_array($input->getCmd('option'), $components)) {
+			if (\in_array($input->getCmd('option'), $components)) {
 				return false;
 			}
 		}
