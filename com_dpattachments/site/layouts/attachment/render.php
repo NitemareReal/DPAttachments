@@ -85,9 +85,9 @@ if ($showUploader == "nouser") {
 	<div class="dp-attachment__date">		
 		<?php if ($showWhen && $showWho) : ?>
 			<?php $author = $attachment->created_by_alias ?: ($attachment->author_name ?? $attachment->created_by); ?>
-			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL'), HTMLHelper::_('date.relative', $attachment->created), $author); ?>
+			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_LABEL'), strtolower(HTMLHelper::_('date.relative', $attachment->created)), $author); ?>
 		<?php elseif ($showWhen) : // only date ?>
-			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_ONLY_DATE_LABEL'), HTMLHelper::_('date.relative', $attachment->created)); ?>
+			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_ONLY_DATE_LABEL'), strtolower(HTMLHelper::_('date.relative', $attachment->created))); ?>
 		<?php else : // only who ?>
 			<?php $author = $attachment->created_by_alias ?: ($attachment->author_name ?? $attachment->created_by); ?>
 			<?php echo sprintf($app->getLanguage()->_('COM_DPATTACHMENTS_TEXT_UPLOADED_ONLY_UPLOADER_LABEL'), $author); ?>

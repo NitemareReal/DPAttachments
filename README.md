@@ -6,7 +6,7 @@ This is the official DPAttachments Github repository. DPAttachments is a slick J
 - mysql >= 8.0.0
 - PHP >= 8.1.0
 
-## INSTALLATION
+## INSTALLATION (original files!! not this fork)
 Download the file from [here](https://joomla.digital-peak.com/download/dpattachments) and install the zip file through the Joomla extension manager. After the installation make sure the plugins are enabled.
 
 ## INTEGRATION
@@ -21,6 +21,10 @@ To upgrade DPAttachments from an older version just install the downloaded zip f
 
 ## DOCUMENTATION
 Check [joomla.digital-peak.com](https://joomla.digital-peak.com/documentation/dpattachments) for more documentation.
+
+## CHANGES IN THIS FORK
+### Version 5.7.3a
+Administrators have more control on what uploaded files metainfo can be seen by users. Administrators can choose to show or hide 'uploader name' and / or 'uploaded date' to 'all users', to 'no user' o to 'users with selected access level(s)'. 'Uploader name' and 'Uploaded date' visibility are managed independently.
 
 ## Development corner
 If you are cloning this repository, then clone also the [DPDocker project](https://github.com/Digital-Peak/DPDocker) into the same folder as DPAttachments and build the images. There are several tasks you can run then:
@@ -70,3 +74,4 @@ License GPL v3
 
 Have fun
 The Digital Peak team
+
