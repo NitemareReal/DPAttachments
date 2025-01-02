@@ -24,7 +24,7 @@ Check [joomla.digital-peak.com](https://joomla.digital-peak.com/documentation/dp
 
 ## CHANGES IN THIS FORK
 ### Version 5.7.3a
-Administrators have more control on what uploaded files metainfo can be seen by users. Administrators can choose to show or hide 'uploader name' and / or 'uploaded date' to 'all users', to 'no user' o to 'users with selected access level(s)'. 'Uploader name' and 'Uploaded date' visibility are managed independently.
+Administrators have more control on what uploaded files metainfo can be seen by users. Administrators can choose to show or hide 'uploader name' and / or 'uploaded date' to 'all users', to 'no user' or to 'users with selected access level(s)'. 'Uploader name' and 'Uploaded date' visibility are managed independently.
 
 ## Development corner
 If you are cloning this repository, then clone also the [DPDocker project](https://github.com/Digital-Peak/DPDocker) into the same folder as DPAttachments and build the images. There are several tasks you can run then:
