@@ -7,7 +7,7 @@
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>5.7.3</version>
+	<version>5.7.3a</version>
 	<description>COM_DPATTACHMENTS_XML_DESCRIPTION</description>
 	<namespace path="src">DigitalPeak\Component\DPAttachments</namespace>
 	<install>
