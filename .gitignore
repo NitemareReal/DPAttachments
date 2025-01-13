@@ -5,3 +5,4 @@
 /docs/src/Support/_generated
 /docs/screenshots
 .vscode
+package-lock.json
