@@ -55,6 +55,12 @@ class Pkg_DPAttachmentsInstallerScript extends InstallerScript implements Databa
 				}
 			}
 		}
+
+		if (version_compare($version, '5.7.6') == -1) {
+			$db = $this->getDatabase();
+			$db->setQuery("update #__extensions set enabled=1 where type = 'plugin' and element = 'dpattachments'");
+			$db->execute();
+		}
 	}
 
 	public function postflight(string $type, InstallerAdapter $parent): void
