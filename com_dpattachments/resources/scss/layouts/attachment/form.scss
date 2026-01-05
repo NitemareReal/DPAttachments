@@ -5,11 +5,9 @@
  */
 
 .com-dpattachments-layout-form {
-	& {
-		margin: 5px 0;
-		padding: 10px;
-		border: 1px solid #cbcbcb;
-	}
+	margin: 5px 0;
+	padding: 10px;
+	border: 1px solid #cbcbcb;
 
 	&_drag {
 		border: 5px dashed #007bff;

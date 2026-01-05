@@ -7,7 +7,6 @@
 
 namespace DigitalPeak\Plugin\Content\DPAttachments\Extension;
 
-use DigitalPeak\Component\DPAttachments\Administrator\Extension\DPAttachmentsComponent;
 use DigitalPeak\Component\DPAttachments\Administrator\Model\AttachmentsModel;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
@@ -63,17 +62,11 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 		if (!$app instanceof CMSWebApplicationInterface) {
 			return;
 		}
-
-		// Get the component instance
-		$component = $app->bootComponent('dpattachments');
-		if (!$component instanceof DPAttachmentsComponent) {
-			return;
-		}
 		
 		// Render the attachments and upload form
 		$event->setArgument(
 			'result',
-			array_merge($event->getArgument('result'), [$component->render(
+			array_merge($event->getArgument('result'), [$app->bootComponent('dpattachments')->render(
 				$context,
 				$item->id,
 				new Registry(['render.columns' => $this->params->get('column_count', 2), 'item' => $item])
@@ -165,9 +158,6 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 
 		// Load the component instance
 		$component = $app->bootComponent('dpattachments');
-		if (!$component instanceof DPAttachmentsComponent) {
-			return;
-		}
 
 		$context = $this->transformContext($context, $item);
 
@@ -207,12 +197,6 @@ class DPAttachments extends CMSPlugin implements SubscriberInterface
 
 		$app = $this->getApplication();
 		if (!$app instanceof CMSWebApplicationInterface) {
-			return;
-		}
-
-		// Load the component instance
-		$component = $app->bootComponent('dpattachments');
-		if (!$component instanceof DPAttachmentsComponent) {
 			return;
 		}
 

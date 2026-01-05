@@ -19,9 +19,10 @@ use Joomla\Utilities\ArrayHelper;
 class AttachmentsModel extends ListModel
 {
 	public $context;
+
 	public $state;
 
-	public function __construct($config = [], MVCFactoryInterface $factory = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null)
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
@@ -189,9 +190,9 @@ class AttachmentsModel extends ListModel
 		// Filter by search in title.
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
-			if (stripos($search, 'id:') === 0) {
-				$query->where('a.id = ' . (int)substr($search, 3));
-			} elseif (stripos($search, 'author:') === 0) {
+			if (stripos((string)$search, 'id:') === 0) {
+				$query->where('a.id = ' . (int)substr((string)$search, 3));
+			} elseif (stripos((string)$search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr((string)$search, 7), true) . '%');
 				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
@@ -209,7 +210,7 @@ class AttachmentsModel extends ListModel
 			$query->where('a.context = ' . $db->quote($context));
 		}
 
-		if ($app->isClient('site')) {
+		if ($app instanceof SiteApplication) {
 			// Filter by start and end dates.
 			$nowDate = $db->quote(Factory::getDate()->toSql());
 
