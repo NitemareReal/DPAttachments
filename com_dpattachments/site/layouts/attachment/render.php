@@ -14,6 +14,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
+use Joomla\CMS\Component\ComponentHelper;
 
 $attachment = $displayData['attachment'];
 if (!$attachment) {
@@ -30,6 +31,7 @@ $previewExtensions = [];
 foreach (Folder::files(JPATH_SITE . '/components/com_dpattachments/tmpl/attachment') as $file) {
 	$previewExtensions[] = File::stripExt($file);
 }
+$params 		= ComponentHelper::getParams('com_dpattachments');
 $showWhen		= true;
 $showWho		= true;
 $showUploadDate	= $params->get('show_upload_date', 'allusers');
