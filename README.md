@@ -23,7 +23,7 @@ To upgrade DPAttachments from an older version just install the downloaded zip f
 Check [joomla.digital-peak.com](https://joomla.digital-peak.com/documentation/dpattachments) for more documentation.
 
 ## CHANGES IN THIS FORK
-### Version 5.7.3a
+### Version 5.7.7.1
 Administrators have more control on what uploaded files metainfo can be seen by users: Administrators can choose to show or hide 'uploader name' and / or 'uploaded date' to 'all users', to 'no user' or to 'users with selected access level(s)'. 'Uploader name' and 'Uploaded date' visibility are managed independently.
 
 ## INSTALLATION (this fork)
